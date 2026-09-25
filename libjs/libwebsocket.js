@@ -72,7 +72,7 @@ export default {
                     // Use ws:// for localhost or wss:// for others (or use ws:// by default)
                     const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
                     wsUrl = protocol + address + ':' + (port + 1) + '/';
-                    wsUrl = 'wss://gateway.ngocrongsaoden.com:2053/';
+                    wsUrl = 'wss://ngocrong-mobile.online:14445/';
                 }
 
                 const ws = new WebSocket(wsUrl);
