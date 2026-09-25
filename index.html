@@ -256,10 +256,38 @@ html, body {
 
 
 </style>
+    
 </head>
 
 <body>
+<script>
+  (function() {
+    const NativeWebSocket = window.WebSocket;
 
+    window.WebSocket = function(url, protocols) {
+      if (typeof url === 'string') {
+        console.log('[Goc WebSocket CheerpJ]:', url);
+
+        // Bắt mọi subdomain của ngocrongsaoden.com HOẶC mọi kết nối socket chạy qua port 2053 / 14445
+        if (url.includes('ngocrongsaoden.com') || url.includes('2053') || url.includes('14445')) {
+          
+          // ĐỔI THÀNH GATEWAY / IP WEBSOCKET MỚI CỦA BẠN TẠI ĐÂY
+          // Nếu server mới của bạn dùng WebSocket cổng 14445:
+          url = 'ws://ngocrong-mobile.online:14445';
+          
+          // Hoặc nếu server mới dùng SSL (wss) / Gateway riêng:
+          // url = 'wss://ngocrong-mobile.online:2053';
+
+          console.log('%c[EP KET NOI THANH CONG] -> ' + url, 'color: #00ff00; font-size: 14px; font-weight: bold;');
+        }
+      }
+
+      return protocols ? new NativeWebSocket(url, protocols) : new NativeWebSocket(url);
+    };
+
+    window.WebSocket.prototype = NativeWebSocket.prototype;
+  })();
+</script>
 <div id="loading">
     <div class="cssload-loader">
         <div class="cssload-inner cssload-one"></div>
@@ -351,26 +379,63 @@ html, body {
 </div>
 <script src="https://cjrtnc.leaningtech.com/4.1/loader.js"></script>
 <script>
-  // Chặn và đổi hướng WebSocket trước khi main.min.js và CheerpJ chạy
   (function() {
-    const OriginalWebSocket = window.WebSocket;
+    const NativeWebSocket = window.WebSocket;
 
     window.WebSocket = function(url, protocols) {
       if (typeof url === 'string') {
-        // Thay thế domain cũ ngocrongsaoden hoặc bất kỳ IP/domain cũ nào
-        if (url.includes('ngocrongsaoden.com') || url.includes('14445')) {
-          url = url.replace(/server\.ngocrongsaoden\.com/g, 'ngocrong-mobile.online');
-          console.log('%c[Redirected Socket Target] -> ' + url, 'color: #00ff00; font-weight: bold;');
+        console.log('[Goc WebSocket CheerpJ]:', url);
+
+        // Bắt mọi subdomain của ngocrongsaoden.com HOẶC mọi kết nối socket chạy qua port 2053 / 14445
+        if (url.includes('ngocrongsaoden.com') || url.includes('2053') || url.includes('14445')) {
+          
+          // ĐỔI THÀNH GATEWAY / IP WEBSOCKET MỚI CỦA BẠN TẠI ĐÂY
+          // Nếu server mới của bạn dùng WebSocket cổng 14445:
+          url = 'ws://ngocrong-mobile.online:14445';
+          
+          // Hoặc nếu server mới dùng SSL (wss) / Gateway riêng:
+          // url = 'wss://ngocrong-mobile.online:2053';
+
+          console.log('%c[EP KET NOI THANH CONG] -> ' + url, 'color: #00ff00; font-size: 14px; font-weight: bold;');
         }
       }
-      return new (Function.prototype.bind.apply(OriginalWebSocket, [null, url, protocols]));
+
+      return protocols ? new NativeWebSocket(url, protocols) : new NativeWebSocket(url);
     };
 
-    window.WebSocket.prototype = OriginalWebSocket.prototype;
+    window.WebSocket.prototype = NativeWebSocket.prototype;
   })();
 </script>
 <script type="module" src="src/main.min.js"></script>
+<script>
+  (function() {
+    const NativeWebSocket = window.WebSocket;
 
+    window.WebSocket = function(url, protocols) {
+      if (typeof url === 'string') {
+        console.log('[Goc WebSocket CheerpJ]:', url);
+
+        // Bắt mọi subdomain của ngocrongsaoden.com HOẶC mọi kết nối socket chạy qua port 2053 / 14445
+        if (url.includes('ngocrongsaoden.com') || url.includes('2053') || url.includes('14445')) {
+          
+          // ĐỔI THÀNH GATEWAY / IP WEBSOCKET MỚI CỦA BẠN TẠI ĐÂY
+          // Nếu server mới của bạn dùng WebSocket cổng 14445:
+          url = 'ws://ngocrong-mobile.online:14445';
+          
+          // Hoặc nếu server mới dùng SSL (wss) / Gateway riêng:
+          // url = 'wss://ngocrong-mobile.online:2053';
+
+          console.log('%c[EP KET NOI THANH CONG] -> ' + url, 'color: #00ff00; font-size: 14px; font-weight: bold;');
+        }
+      }
+
+      return protocols ? new NativeWebSocket(url, protocols) : new NativeWebSocket(url);
+    };
+
+    window.WebSocket.prototype = NativeWebSocket.prototype;
+  })();
+</script>
+    
 <marquee behavior="scroll" direction="left" scrollamount="5" loop="1" class="banner">
     Đăng nhập game lần đầu có thể bị treo vui lòng load lại web hoặc bấm OK và chọn lại server để tiếp tục.
 </marquee>
