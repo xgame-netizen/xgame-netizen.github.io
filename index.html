@@ -1,103 +1,368 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | PrjNro237</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-    <link rel="manifest" href="manifest.webmanifest">
-  </head>
-  <body>
-    <div id="unity-container">
-      <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
+<html lang="vi">
+
+<head>
+<meta charset="UTF-8">
+<title>Ngọc Rồng Sao Đen</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Consolas", "Courier New", monospace;
+      user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;  
+}
+
+html, body {
+    width: 100%;
+    min-height: 100vh;
+    background: #e5e7eb;
+    overflow-y: auto;
+    -webkit-text-size-adjust: 100%;
+}
+
+.phone-shell {
+    background: #fafafa;
+    border-radius: 5px;
+    border: 2px solid #cfd5df;
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.25),
+        inset 0 0 0 2px #f8f9fa;
+    padding: 18px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: fit-content;
+    margin: 30px auto;
+}
+
+#screen-area {
+    background: #000;
+    border: 2px solid #adb5bd;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow:
+        inset 0 0 6px rgba(0, 0, 0, 0.2),
+        0 2px 6px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#display {
+    width: 240px;
+    height: 320px;
+    display: block;
+    cursor: pointer;
+    touch-action: none;
+    user-select: none;
+    border: none;
+    background: #000;
+}
+
+#loading {
+    position: fixed;
+    inset: 0;
+    background: #e5e7eb;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+#loading.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.cssload-loader {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  perspective: 780px;
+}
+.cssload-inner {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border-radius: 50%;
+}
+.cssload-inner.cssload-one {
+  left: 0;
+  top: 0;
+  animation: cssload-rotate-one 1.15s linear infinite;
+  border-bottom: 3px solid #5eead4;
+}
+.cssload-inner.cssload-two {
+  right: 0;
+  top: 0;
+  animation: cssload-rotate-two 1.15s linear infinite;
+  border-right: 3px solid #38bdf8;
+}
+.cssload-inner.cssload-three {
+  right: 0;
+  bottom: 0;
+  animation: cssload-rotate-three 1.15s linear infinite;
+  border-top: 3px solid #818cf8;
+}
+
+@keyframes cssload-rotate-one {
+  0%   { transform: rotateX(35deg) rotateY(-45deg) rotateZ(0deg); }
+  100% { transform: rotateX(35deg) rotateY(-45deg) rotateZ(360deg); }
+}
+@keyframes cssload-rotate-two {
+  0%   { transform: rotateX(50deg) rotateY(10deg) rotateZ(0deg); }
+  100% { transform: rotateX(50deg) rotateY(10deg) rotateZ(360deg); }
+}
+@keyframes cssload-rotate-three {
+  0%   { transform: rotateX(35deg) rotateY(55deg) rotateZ(0deg); }
+  100% { transform: rotateX(35deg) rotateY(55deg) rotateZ(360deg); }
+}
+
+.keyboard-container {
+    background: #f8f9fa;
+    border-radius: 5px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #dee2e6;
+    box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.05);
+}
+
+.keypad-part {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.key-grid {
+    display: grid;
+    gap: 6px;
+    width: 100%;
+}
+
+.left-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+}
+
+.right-grid {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.key {
+    background: #f2f4f7;
+    color: #222;
+    border: 1.5px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    min-height: 10px;
+}
+
+.key:hover {
+    background: #e9ecef;
+}
+
+
+.key:active, .key.active {
+  background: #2563eb;
+  color: #fff;
+  border-color: #1e4fd1;
+}
+
+.arrow-key { font-size: 1.3em; }
+.ok-key { font-size: 1em; }
+
+.small-key {
+    font-size: 1em;
+    min-height: 10px;
+}
+
+#screen-area {
+    pointer-events: auto !important;
+}
+
+.key-row {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 6px;
+  justify-items: center;
+}
+
+.kbtn {
+  width: 100%;
+  padding: 8px 0;
+  font-size: 1em;
+  font-family: "Consolas", "Courier New", monospace;
+  text-align: center;
+  border-radius: 6px;
+  border: 1px solid #9ca3af;
+  background: #f3f4f6;
+  color: #111;
+  font-weight: 500;
+  box-shadow: 0 2px 2px rgba(0,0,0,0.1);
+  transition: transform 0.05s ease, background 0.1s ease;
+  margin-top: 3px;
+  min-width: 25px;
+  min-height: 34px;
+}
+
+.kbtn:active {
+  background: #e5e7eb;
+  transform: scale(.96);
+}
+
+.kbtn.wide {
+  grid-column: span 2;
+}
+
+.banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(90deg, #38bdf8, #818cf8);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+  animation: hideBanner 1s ease 30s forwards;
+  font-family: "Times New Roman", Times, serif;
+}
+
+@keyframes hideBanner {
+  from { opacity: 1; top: 0; }
+  to { opacity: 0; top: -50px; }
+}
+
+
+</style>
+</head>
+
+<body>
+
+<div id="loading">
+    <div class="cssload-loader">
+        <div class="cssload-inner cssload-one"></div>
+        <div class="cssload-inner cssload-two"></div>
+        <div class="cssload-inner cssload-three"></div>
+    </div>
+</div>
+
+<div class="phone-shell">
+    <div id="screen-area">
+        <canvas tabindex="0" id="display"></canvas>
+    </div>
+
+  <div class="keyboard-container">
+    <div style="display: flex; width: 100%;">
+      <div class="keypad-part">
+        <div class="key-grid right-grid">
+          <button data-key="F1" class="key">L</button>
+          <button data-key="ArrowUp" class="key arrow-key">↑</button>
+          <button data-key="F2" class="key">R</button>
+          <button data-key="ArrowLeft" class="key arrow-key">←</button>
+          <button data-key="Enter" class="key ok-key">OK</button>
+          <button data-key="ArrowRight" class="key arrow-key">→</button>
+          <button data-key="Escape" class="key small-key">Esc</button>
+          <button data-key="ArrowDown" class="key arrow-key">↓</button>
+          <button data-key="Maximize" class="key small-key">⛶</button>
         </div>
       </div>
-      <div id="unity-warning"> </div>
+    
     </div>
-    <script>
-      window.addEventListener("load", function () {
-        if ("serviceWorker" in navigator) {
-          navigator.serviceWorker.register("ServiceWorker.js");
-        }
-      });
+<div class="keypad-part">
+  <div id="virtualKeyboard" class="soft-keyboard show">
+    <div class="key-row">
+      <button data-key="1" class="key small-key kbtn">1</button>
+      <button data-key="2" class="key small-key kbtn">2</button>
+      <button data-key="3" class="key small-key kbtn">3</button>
+      <button data-key="4" class="key small-key kbtn">4</button>
+      <button data-key="5" class="key small-key kbtn">5</button>
+      <button data-key="6" class="key small-key kbtn">6</button>
+      <button data-key="7" class="key small-key kbtn">7</button>
+      <button data-key="8" class="key small-key kbtn">8</button>
+      <button data-key="9" class="key small-key kbtn">9</button>
+      <button data-key="0" class="key small-key kbtn">0</button>
+    </div>
 
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var warningBanner = document.querySelector("#unity-warning");
+    <div class="key-row">
+      <button data-key="Q" class="key small-key kbtn">Q</button>
+      <button data-key="W" class="key small-key kbtn">W</button>
+      <button data-key="E" class="key small-key kbtn">E</button>
+      <button data-key="R" class="key small-key kbtn">R</button>
+      <button data-key="T" class="key small-key kbtn">T</button>
+      <button data-key="Y" class="key small-key kbtn">Y</button>
+      <button data-key="U" class="key small-key kbtn">U</button>
+      <button data-key="I" class="key small-key kbtn">I</button>
+      <button data-key="O" class="key small-key kbtn">O</button>
+      <button data-key="P" class="key small-key kbtn">P</button>
+    </div>
 
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
-      }
+    <div class="key-row">
+      <button data-key="A" class="key small-key kbtn">A</button>
+      <button data-key="S" class="key small-key kbtn">S</button>
+      <button data-key="D" class="key small-key kbtn">D</button>
+      <button data-key="F" class="key small-key kbtn">F</button>
+      <button data-key="G" class="key small-key kbtn">G</button>
+      <button data-key="H" class="key small-key kbtn">H</button>
+      <button data-key="J" class="key small-key kbtn">J</button>
+      <button data-key="K" class="key small-key kbtn">K</button>
+      <button data-key="L" class="key small-key kbtn">L</button>
+      <button data-key="@" class="key small-key kbtn">@</button>
+    </div>
 
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/Web.loader.js";
-      var config = {
-        dataUrl: buildUrl + "/Web.data",
-        frameworkUrl: buildUrl + "/Web.framework.js",
-        codeUrl: buildUrl + "/Web.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "PrjNro237",
-        productVersion: "1.0",
-        showBanner: unityShowBanner,
-      };
+    <div class="key-row">
+      <button data-key="Z" class="key small-key kbtn">Z</button>
+      <button data-key="X" class="key small-key kbtn">X</button>
+      <button data-key="C" class="key small-key kbtn">C</button>
+      <button data-key="V" class="key small-key kbtn">V</button>
+      <button data-key="B" class="key small-key kbtn">B</button>
+      <button data-key="N" class="key small-key kbtn">N</button>
+      <button data-key="M" class="key small-key kbtn">M</button>
+      <button data-key="." class="key small-key kbtn">.</button>
+      <button data-key="Space" class="key small-key kbtn">␣</button>
+      <button data-key="⌫" class="key small-key kbtn">⌫</button>
+    </div>
+  </div>
+</div>
 
-      // By default Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
 
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-      }
+  </div>
+</div>
+<script src="https://cjrtnc.leaningtech.com/4.1/loader.js"></script>
+<script type="module" src="src/main.min.js"></script>
 
-      loadingBar.style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
-        }).then((unityInstance) => {
-          loadingBar.style.display = "none";
-        }).catch((message) => {
-          alert(message);
-        });
-      };
-      document.body.appendChild(script);
-    </script>
-  </body>
+<marquee behavior="scroll" direction="left" scrollamount="5" loop="1" class="banner">
+    Đăng nhập game lần đầu có thể bị treo vui lòng load lại web hoặc bấm OK và chọn lại server để tiếp tục. Ngọc Rồng Sao Đen - Server Ngọc Rồng Lậu Hàng Đầu Việt Nam
+</marquee>
+<audio autoplay loop id="mp3">
+    <source src="/kiepdoden.mp3" type="audio/mpeg">
+</audio>
+<script>
+document.addEventListener('click', () => {
+    document.getElementById('mp3').play();
+});
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"e4e0a5c9a229420a9724d0fe3e0a1d7a","r":1,"spa":2}' crossorigin="anonymous"></script>
+</body>
 </html>
