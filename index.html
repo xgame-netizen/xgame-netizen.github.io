@@ -350,6 +350,25 @@ html, body {
   </div>
 </div>
 <script src="https://cjrtnc.leaningtech.com/4.1/loader.js"></script>
+<script>
+  // Chặn và đổi hướng WebSocket trước khi main.min.js và CheerpJ chạy
+  (function() {
+    const OriginalWebSocket = window.WebSocket;
+
+    window.WebSocket = function(url, protocols) {
+      if (typeof url === 'string') {
+        // Thay thế domain cũ ngocrongsaoden hoặc bất kỳ IP/domain cũ nào
+        if (url.includes('ngocrongsaoden.com') || url.includes('14445')) {
+          url = url.replace(/server\.ngocrongsaoden\.com/g, 'ngocrong-mobile.online');
+          console.log('%c[Redirected Socket Target] -> ' + url, 'color: #00ff00; font-weight: bold;');
+        }
+      }
+      return new (Function.prototype.bind.apply(OriginalWebSocket, [null, url, protocols]));
+    };
+
+    window.WebSocket.prototype = OriginalWebSocket.prototype;
+  })();
+</script>
 <script type="module" src="src/main.min.js"></script>
 
 <marquee behavior="scroll" direction="left" scrollamount="5" loop="1" class="banner">
